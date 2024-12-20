@@ -18,7 +18,7 @@
 
 ## ➡️ 1. Introducción
 
-En este manual podrás encontrar una guía paso a paso para configurar un proyecto de **[PHP]** con la pasarela de pagos de IZIPAY. Te proporcionaremos instrucciones detalladas y credenciales de prueba para la instalación y configuración del proyecto, permitiéndote trabajar y experimentar de manera segura en tu propio entorno local.
+En este manual podrás encontrar una guía paso a paso para configurar un proyecto de **[JAVA]** con la pasarela de pagos de IZIPAY. Te proporcionaremos instrucciones detalladas y credenciales de prueba para la instalación y configuración del proyecto, permitiéndote trabajar y experimentar de manera segura en tu propio entorno local.
 Este manual está diseñado para ayudarte a comprender el flujo de la integración de la pasarela para ayudarte a aprovechar al máximo tu proyecto y facilitar tu experiencia de desarrollo.
 
 
@@ -221,10 +221,10 @@ La IPN es una notificación de servidor a servidor (servidor de Izipay hacia el 
 
 Se realiza la verificación de la firma y se imprime en el log el estado del pago. Podrás encontrarlo en el archivo `src/main/java/com/example/McwServlet.java`.
 
-```php
+```java
 case "/ipn":
-		// Asignando los valores de la respuesta IPN en un Map
-		Map<String, String> ipnParameters = request.getParameterMap().entrySet().stream()
+    // Asignando los valores de la respuesta IPN en un Map
+    Map<String, String> ipnParameters = request.getParameterMap().entrySet().stream()
     .filter(entry -> entry.getValue().length > 0)
     .collect(Collectors.toMap(
             		Map.Entry::getKey,
