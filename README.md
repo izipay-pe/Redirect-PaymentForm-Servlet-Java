@@ -129,13 +129,13 @@ Para desplegar la pasarela, crea un formulario **HTML** de tipo **POST** con el 
 
 ```html
           <!-- Formulario con los datos de pago -->
-    			<form class="from-checkout" action="https://secure.micuentaweb.pe/vads-payment/" method="post">
-				            <!-- Inputs generados dinámicamente -->
-                		<input type="hidden" th:name="vads_action_mode" th:value="${parameters.vads_action_mode}" />
-				            ...
-                    ...
-				            <input type="hidden" th:name="signature" th:value="${parameters.signature}" />
-				            <button class="btn btn-checkout" type="submit" name="pagar">Pagar</button>
+          <form class="from-checkout" action="https://secure.micuentaweb.pe/vads-payment/" method="post">
+  		<!-- Inputs generados dinámicamente -->
+		<input type="hidden" th:name="vads_action_mode" th:value="${parameters.vads_action_mode}" />
+  		...
+		...
+		<input type="hidden" th:name="signature" th:value="${parameters.signature}" />
+		<button class="btn btn-checkout" type="submit" name="pagar">Pagar</button>
           </form>	
 ```
 ℹ️ Para más información: [Formulario de pago en POST](https://secure.micuentaweb.pe/doc/es-PE/form-payment/quick-start-guide/enviar-un-formulario-de-pago-en-post.html)
