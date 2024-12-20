@@ -114,7 +114,7 @@ public String calcularSignature(Map<String, String> parameters) {
 	// Obtener la clave de test o producción
 	String key =  properties.getProperty("key");
 	...
-  ...
+  	...
 	contentSignature.append(key);
 	
 	// Generar y retornar la firma 
@@ -168,7 +168,7 @@ public String calcularSignature(Map<String, String> parameters) {
     }
   }
 
-  // Agregar la key al final del contenido
+  	// Agregar la key al final del contenido
 	contentSignature.append(key);
 	
 	// Generar y retornar la firma 
