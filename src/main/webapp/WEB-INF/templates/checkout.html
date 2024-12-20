@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="layout :: headContent">
+	<th:block th:fragment="dynamicHead">
+	</th:block>
+</head>
+
+<body>
+    <main th:replace="layout :: mainContent">
+    	<th:block th:fragment="dynamicContent">
+			<div class="right-column col-md-6 data-checkout">
+				<section class="customer-details">
+				  <h2>Datos del pago</h2>
+				  <!-- Order ID -->
+				  <div class="form-group">
+					<label for="orderId">Order-id</label>
+					<input readonly class="form-control" th:name="vads_order_id" th:value="${parameters.vads_order_id}" />
+				  </div>
+
+				<!-- Monto -->
+				<div class="form-group">
+					<label for="amount">Monto</label>
+					<input readonly class="form-control" th:name="vads_order_id" th:value="${amount}" />
+				</div>
+
+				<!-- Moneda -->
+				<div class="form-group">
+					<label for="amount">Moneda</label>
+					<input readonly class="form-control" th:name="vads_order_id" th:value="${currency}" />
+				</div>
+			</div>
+			<section class="container" >
+			<!-- Formulario con los datos de pago -->
+    			<form class="from-checkout" action="https://secure.micuentaweb.pe/vads-payment/" method="post">
+				<!-- Inputs generados dinámicamente -->
+                		<input type="hidden" th:name="vads_action_mode" th:value="${parameters.vads_action_mode}" />
+				<input type="hidden" th:name="vads_amount" th:value="${parameters.vads_amount}" />
+				<input type="hidden" th:name="vads_ctx_mode" th:value="${parameters.vads_ctx_mode}" />
+				<input type="hidden" th:name="vads_currency" th:value="${parameters.vads_currency}" />
+				<input type="hidden" th:name="vads_cust_address" th:value="${parameters.vads_cust_address}" />
+				<input type="hidden" th:name="vads_cust_cell_phone" th:value="${parameters.vads_cust_cell_phone}" />
+				<input type="hidden" th:name="vads_cust_city" th:value="${parameters.vads_cust_city}" />
+				<input type="hidden" th:name="vads_cust_country" th:value="${parameters.vads_cust_country}" />
+				<input type="hidden" th:name="vads_cust_email" th:value="${parameters.vads_cust_email}" />
+				<input type="hidden" th:name="vads_cust_first_name" th:value="${parameters.vads_cust_first_name}" />
+				<input type="hidden" th:name="vads_cust_last_name" th:value="${parameters.vads_cust_last_name}" />
+				<input type="hidden" th:name="vads_cust_state" th:value="${parameters.vads_cust_state}" />
+				<input type="hidden" th:name="vads_cust_zip" th:value="${parameters.vads_cust_zip}" />
+				<input type="hidden" th:name="vads_cust_national_id" th:value="${parameters.vads_cust_national_id}" />
+				<input type="hidden" th:name="vads_order_id" th:value="${parameters.vads_order_id}" />
+				<input type="hidden" th:name="vads_page_action" th:value="${parameters.vads_page_action}" />
+				<input type="hidden" th:name="vads_payment_config" th:value="${parameters.vads_payment_config}" />
+				<input type="hidden" th:name="vads_redirect_success_timeout" th:value="${parameters.vads_redirect_success_timeout}" />
+				<input type="hidden" th:name="vads_return_mode" th:value="${parameters.vads_return_mode}" />
+				<input type="hidden" th:name="vads_site_id" th:value="${parameters.vads_site_id}" />
+				<input type="hidden" th:name="vads_trans_date" th:value="${parameters.vads_trans_date}" />
+				<input type="hidden" th:name="vads_trans_id" th:value="${parameters.vads_trans_id}" />
+				<input type="hidden" th:name="vads_url_success" th:value="${parameters.vads_url_success}" />
+				<input type="hidden" th:name="vads_version" th:value="${parameters.vads_version}" />
+				<input type="hidden" th:name="signature" th:value="${parameters.signature}" />
+				<button class="btn btn-checkout" type="submit" name="pagar">Pagar</button>
+            		</form>	
+  		</section>
+        </th:block>
+    </main>
+</body>
+<html>
+
