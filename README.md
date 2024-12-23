@@ -63,7 +63,7 @@ Reemplace **[CHANGE_ME]** con sus credenciales de `API REST` extraídas desde el
 # Identificador de su tienda
 merchantCode=CHANGE_ME_USER_ID
 # Clave de Test o Producción
-key=CHANGE_ME_USER_ID
+key=CHANGE_ME_PASSWORD
 ```
 
 1. Compilar el proyecto usando Maven
@@ -282,7 +282,7 @@ Reemplace **[CHANGE_ME]** con sus credenciales de PRODUCCIÓN extraídas desde e
 # Identificador de su tienda
 merchantCode=CHANGE_ME_USER_ID
 # Clave de Test o Producción
-key=CHANGE_ME_USER_ID
+key=CHANGE_ME_PASSWORD
 ```
 
 ## 🎨 5. Personalización
