@@ -54,7 +54,7 @@ git clone https://github.com/izipay-pe/Redirect-PaymentForm-Servlet-Java/
 
 ### Datos de conexión 
 
-Reemplace **[CHANGE_ME]** con sus credenciales de `API REST` extraídas desde el Back Office Vendedor, revisar [Requisitos previos](https://github.com/izipay-pe/Redirect-PaymentForm-Servlet-Java/tree/main?tab=readme-ov-file#-2-requisitos-previos).
+Reemplace **[CHANGE_ME]** con sus credenciales de `API` extraídas desde el Back Office Vendedor, revisar [Requisitos previos](https://github.com/izipay-pe/Redirect-PaymentForm-Servlet-Java/tree/main?tab=readme-ov-file#-2-requisitos-previos).
 
 - Editar el archivo `config.properties` en la ruta `src/main/resources/`:
 ```java
