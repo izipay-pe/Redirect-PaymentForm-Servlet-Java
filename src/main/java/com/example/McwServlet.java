@@ -56,10 +56,10 @@ public class McwServlet extends HttpServlet {
 	WebContext context = new WebContext(request, response, getServletContext());
 	
 	// Generar orderId
-	String orderId = mcwController.generarOrderId();
+	String orderId = mcwController.generateOrderId();
         
 	switch (path) {
-	    // Renderiza la plantilla 'index' al solicitar la ruta raíz, checkout y result
+	   // Renderiza la plantilla 'index' al solicitar la ruta raíz, checkout y result
             case "/":
 		// Agregando el orderId al contexto
 		context.setVariable("orderId", orderId);
@@ -131,19 +131,18 @@ public class McwServlet extends HttpServlet {
 		break;		
 
             case "/result":
-	         // Procesando datos POST enviados de la respuesta de Izipay y almacenándolos en un Map	
-		 Map<String, String> resultParameters = request.getParameterMap().entrySet().stream()
+	        // Procesando datos POST enviados de la respuesta de Izipay y almacenándolos en un Map	
+		Map<String, String> resultParameters = request.getParameterMap().entrySet().stream()
         	.filter(entry -> entry.getValue().length > 0)
         	.collect(Collectors.toMap(
             		Map.Entry::getKey,
             		entry -> entry.getValue()[0]
         	));
 		
-		// Almacenar el signature de la respuesta
-		String resultPostSignature = resultParameters.get("signature");
-		// Calcular el valor del signature
-		String resultSignature = mcwController.calcularSignature(resultParameters);
-		
+		// Válida que la respuesta sea íntegra comprando el signature recibido con el generado	
+		if (!mcwController.checkSignature(resultParameters)){
+			break;
+		}
 		
 		currency = resultParameters.get("vads_currency");
 
@@ -153,25 +152,22 @@ public class McwServlet extends HttpServlet {
 			currencyType = "USD";
 		}
 		
-		// Procesa la condicional si el signature calculado con el que recibimos son iguales
-		if (resultSignature.equals(resultPostSignature)) {
-			// Almacena algunos datos de la respuesta en variables
-			String orderTotalAmount = resultParameters.get("vads_amount");
-			double orderAmountdouble = Double.parseDouble(orderTotalAmount) / 100;
-    			String orderAmount = String.format("%.02f", orderAmountdouble);
+		// Almacena algunos datos de la respuesta en variables
+		String orderTotalAmount = resultParameters.get("vads_amount");
+		double orderAmountdouble = Double.parseDouble(orderTotalAmount) / 100;
+    		String orderAmount = String.format("%.02f", orderAmountdouble);
 
-			// Agrega los datos al contexto
-			context.setVariable("amount", orderAmount);
-			context.setVariable("parameters", resultParameters);
-			context.setVariable("currency", currencyType);
+		// Agrega los datos al contexto
+		context.setVariable("amount", orderAmount);
+		context.setVariable("parameters", resultParameters);
+		context.setVariable("currency", currencyType);
 
-			// Renderiza el template y enviando los datos agregados al contexto
-			templateEngine.process("result", context, response.getWriter());
-		}
+		// Renderiza el template y enviando los datos agregados al contexto
+		templateEngine.process("result", context, response.getWriter());
 
 		break;
-	    
-	    case "/ipn":
+	   
+	   case "/ipn":
 		// Asignando los valores de la respuesta IPN en un Map
 		Map<String, String> ipnParameters = request.getParameterMap().entrySet().stream()
         	.filter(entry -> entry.getValue().length > 0)
@@ -180,31 +176,24 @@ public class McwServlet extends HttpServlet {
             		entry -> entry.getValue()[0]
         	));
 		
-		// Almacenar el signature de la respuesta IPN 
-		String ipnPostSignature = ipnParameters.get("signature");
-		// Calcular el valor del signature
-		String ipnSignature = mcwController.calcularSignature(ipnParameters);
-		
+		// Válida que la respuesta sea íntegra comprando el signture recibido con el generado
+		if (!mcwController.checkSignature(ipnParameters)){
+			System.out.println("Notification Error");
+		}
+
 		// Almacena algunos datos de la respuesta IPN en variables
 		String orderStatus = ipnParameters.get("vads_trans_status");
 		String orderId = ipnParameters.get("vads_order_id");
 		String uuid = ipnParameters.get("vads_trans_uuid");
 		
-		// Procesa la condicional si el signature calculado con el que recibimos en la IPN son iguales
-		if (ipnSignature.equals(ipnPostSignature)) {
-			// Imprimiendo en el log el Order Status
-			System.out.println("OK! Order Status is " + orderStatus);
-
-		} else {
-			System.out.println("Notification Error");
-		}
+		// Retornando el OrderStatus
+		response.getWriter().write("OK! Order Status is " + orderStatus);
 
 		break;
-	    
+	   
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
     }
 }
-
