@@ -27,7 +27,7 @@ public class McwController {
     private McwProperties properties = new McwProperties();
 
     // Método para generar un orderNumer basado en la hora
-    public String generarOrderId() {
+    public String generateOrderId() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'Order-'yyyyMMddHHmmss");
         return LocalDateTime.now().format(formatter);
     }
@@ -36,7 +36,7 @@ public class McwController {
     public Map<String, String> dataForm(Map<String, String> parameters) {
         
 	// Obteniendo claves API
-	String merchantCode = properties.getProperty("merchantCode");
+	String shop_id = properties.getProperty("SHOP_ID");
 	
 	// Convirtiendo el valor del amount
 	String amountStr = parameters.get("amount");
@@ -44,7 +44,6 @@ public class McwController {
 	BigDecimal amountCent = amountUnit.multiply(BigDecimal.valueOf(100));
 	long amount = amountCent.longValue();
 
-	// Crear un TreeMap para ordenar los parámetros alfabéticamente por clave
     	Map<String, String> newParams = new TreeMap<>();
 
     	// Definir los parámetros vads_ y sus valores
@@ -54,7 +53,7 @@ public class McwController {
     	newParams.put("vads_payment_config", "SINGLE");
     	newParams.put("vads_url_success", "http://127.0.0.1:8080/Redirect-PaymentForm-Servlet-Java/result");
     	newParams.put("vads_return_mode", "POST");
-    	newParams.put("vads_site_id", merchantCode); // ID de tienda
+    	newParams.put("vads_site_id", shop_id); // ID de tienda
 							
     	newParams.put("vads_cust_first_name", parameters.get("firstName"));
     	newParams.put("vads_cust_last_name", parameters.get("lastName"));
@@ -70,13 +69,11 @@ public class McwController {
     	newParams.put("vads_currency", parameters.get("currency"));
 	newParams.put("vads_cust_national_id", parameters.get("identityCode"));	
 
-    	// Generar vads_trans_date con la fecha actual (en formato YmdHis)
         SimpleDateFormat utcDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	utcDateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
 	String transDate = utcDateFormat.format(new Date());
 	newParams.put("vads_trans_date", transDate);	
     		
-	// Generar vads_trans_id como un hash de tiempo
     	String transId = Integer.toHexString((int) System.currentTimeMillis()).substring(0, 6);
     	newParams.put("vads_trans_id", transId);
 	
@@ -84,7 +81,7 @@ public class McwController {
     	newParams.put("vads_redirect_success_timeout", "5");  // Tiempo de redirección
 	
 	// Calcula el signature con los datos del Map
-	String signature = calcularSignature(newParams);
+	String signature = calculateSignature(newParams);
 
 	// Agrega el signature calulado al Map
 	newParams.put("signature", signature);
@@ -94,11 +91,11 @@ public class McwController {
     }
 
     // Método para calcular el signature
-    public String calcularSignature(Map<String, String> parameters) {
+    public String calculateSignature(Map<String, String> parameters) {
 	Map<String, String> sortedParams = new TreeMap<>(parameters);	
 	
 	// Obtener la Key
-	String key =  properties.getProperty("key");
+	String key =  properties.getProperty("KEY");
 	// Crear un StringBuilder para construir el contenido de la firma.
 	StringBuilder contentSignature = new StringBuilder();
 	
@@ -112,7 +109,7 @@ public class McwController {
         	if (paramKey.startsWith("vads_")) {
 			// Agregar el valor del parámetro seguido de un "+" al contenido
             		contentSignature.append(value).append("+");
-       	 	}
+       		}
     	}
 	
 	// Agregar la key al final del contenido
@@ -135,5 +132,13 @@ public class McwController {
     	}
     }
 
-}
 
+    public boolean checkSignature(Map<String, String> parameters){
+    	// Obtener el signature de la respuesta
+    	String signature = parameters.get("signature");
+	
+	return signature.equals(calculateSignature(parameters));
+	
+    }
+
+}
